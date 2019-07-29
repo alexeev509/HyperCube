@@ -8,27 +8,32 @@ public class Main {
     private final static Scanner scanner = new Scanner(System.in);
     private static List<Integer> listOfIdexexOfDifferentBytes=new ArrayList<>();
     private static List<Integer> listOfIdexexOfSameBytes=new ArrayList<>();
+    public static String input;
+    public static String[] massOfInputBytes;
+    public static String startByte;
+    public static String destinationByte;
     public static void main(String[] args) {
         findOfDifferentTracks(scanner);
     }
-    public static void findOfDifferentTracks(Scanner scanner){
-        String input=scanner.nextLine();
-        String[] massOfInputBytes = input.trim().split(" ");
-        String startByte=massOfInputBytes[0];
-        String destinationByte=massOfInputBytes[1];
+
+    public static void init(Scanner scanner) {
+        input = scanner.nextLine();
+        massOfInputBytes = input.trim().split(" ");
+        startByte = massOfInputBytes[0];
+        destinationByte = massOfInputBytes[1];
 
         for (int i = 0; i < startByte.length(); i++) {
-            if(startByte.charAt(i)!=destinationByte.charAt(i)){
+            if (startByte.charAt(i) != destinationByte.charAt(i)) {
                 listOfIdexexOfDifferentBytes.add(i);
-            }else {
+            } else {
                 listOfIdexexOfSameBytes.add(i);
             }
         }
+    }
 
-//        System.out.println(new StringBuilder(startByte).replace(listOfIdexexOfDifferentBytes.get(0),
-//                listOfIdexexOfDifferentBytes.get(0)+1, String.valueOf('0').toString()));
+    public static void findOfDifferentTracks(Scanner scanner) {
 
-
+        init(scanner);
         //code for different combinations
         int counter=0;
         while (counter<listOfIdexexOfDifferentBytes.size()) {
@@ -54,34 +59,30 @@ public class Main {
             startByteCopy.replace(listOfIdexexOfSameBytes.get(j),
                     listOfIdexexOfSameBytes.get(j) + 1,
                     String.valueOf(replaceCorrenctChar));
-           // listOfIdexexOfDifferentBytes.add(listOfIdexexOfSameBytes.get(j));
             System.out.print(startByteCopy.toString()+" ");
-            //cyclic move
-            for (int i = counter; i < listOfIdexexOfDifferentBytes.size()+counter; i++) {
-                
-                j= (i>=listOfIdexexOfDifferentBytes.size()) ? starter++ :i;
 
-                startByteCopy = new StringBuilder(startByteCopy.toString());
-                replaceBits(startByteCopy,j);
-                System.out.print(startByteCopy.toString() + " ");
-            }
-          //  listOfIdexexOfDifferentBytes.remove(listOfIdexexOfDifferentBytes.size()-1);
+            startByteCopy = differentCombinationsReplace(counter, j, starter, startByteCopy);
+
             replaceCorrenctChar = replaceCorrenctChar=='0' ? '1':'0';
             startByteCopy.replace(listOfIdexexOfSameBytes.get(counter),
                     listOfIdexexOfSameBytes.get(counter) + 1,
                     String.valueOf(replaceCorrenctChar));
+            System.out.println("counter:" + startByteCopy.toString());
             System.out.print(startByteCopy.toString() + " ");
             System.out.println();
             counter++;
         }
     }
-    public static void differentCombinationsReplace(int counter,int j,int starter,StringBuilder startByteCopy){
+
+
+    public static StringBuilder differentCombinationsReplace(int counter, int j, int starter, StringBuilder startByteCopy) {
         for (int i = counter; i < listOfIdexexOfDifferentBytes.size()+counter; i++) {
             j= (i>=listOfIdexexOfDifferentBytes.size()) ? starter++ :i;
             startByteCopy = new StringBuilder(startByteCopy.toString());
             replaceBits(startByteCopy,j);
             System.out.print(startByteCopy.toString() + " ");
         }
+        return startByteCopy;
     }
 
     public static void replaceBits(StringBuilder startByteCopy,int j){
